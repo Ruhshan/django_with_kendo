@@ -16,7 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from mainApp import views
+#from kendoui_backend.views import KendoListProviderView
+
+from mainApp.models import Client
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', views.ClientListView.as_view(), name='client-list'),
+    url(r'^json$', views.ClientJsonView.as_view(), name='client-json'),
+    url(r'^$', views.ClientListView.as_view(), name='client-list'),
+    #url(r'^kendo_data$',KendoListProviderView.as_view(model=Client), name='client_kendo')
+
 ]

@@ -12,3 +12,9 @@ class Client(models.Model):
 
     def __unicode__(self):
         return self.name
+    def as_dict(self):
+        return {
+            "name":self.name,
+            "occupation": self.occupation,
+            "date_of_birth":self.date_of_birth
+        }
