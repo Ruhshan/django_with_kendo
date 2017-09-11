@@ -22,23 +22,19 @@
     $(document).ready(
         function () {
             var dataSourceArguments = {
-                pageSize: 5,
+                pageSize: 12,
                 serverPaging: true,
-                serverFiltering: true,
-                serverSorting: true,
+                //serverFiltering: true,
+                //serverSorting: true,
                 transport: {
-                    type: "odata",
                     read: {
                         url: "{% url 'client-json' %}",
                         dataType: "json",
                     }
                 },
                 schema: {
-                    /*total: "count",
-                    data: function(d) {return d['payload'].map(function(e) {return e['fields']})}
-
-                     */
-                    data: "data"
+                    total: "count",
+                    data: "results",
                 }
             }
 
@@ -48,23 +44,46 @@
                 height: 600,
                 filterable: true,
                 sortable: true,
-                pageable: true,
-                columns: [ {
+                pageable: {
+                    refresh: true,
+                    pageSizes: true,
+                    buttonCount: 5
+                },
+                columns: [
+                    {
+                    field: "id",
+                    title: "Example ID"
+                    },
+                    {
                     field: "name",
-                    width: 90,
                     title: "Example name"
                     },
                     {
                         field: "occupation",
-                        width: 90,
                         title: "Example occupation"
                     },
                     {
                         field: "date_of_birth",
-                        width: 90,
                         title: "Example dob"
                     },
                 ]
+            });
+
+            $("select[data-role='dropdownlist']").kendoDropDownList({
+                dataTextField: "PageSize",
+                dataValueField: "SizeValue",
+                dataSource: [
+                    {PageSize: 2},
+                    {PageSize: 3},
+                    {PageSize: 4},
+                    {PageSize: 5},
+                    {PageSize: 'All', SizeValue:1000},
+                ],
+                change: function (e) {
+                    var grid = $("#grid").data("kendoGrid");
+                    grid.dataSource.pageSize(parseInt(this.value()));  // this.value() being the value selected in Combo
+                }
+
             });
         }
 
