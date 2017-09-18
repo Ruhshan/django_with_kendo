@@ -36,5 +36,23 @@ class ClientJsonView(generics.ListAPIView):
     pagination_class = ClientPageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
-        print self.request.GET
-        return Client.objects.all()
+
+        clients = Client.objects.all()
+        direction = ''
+        field = ''
+
+        try:
+            direction = self.request.GET['sort[0][dir]']
+            field = self.request.GET['sort[0][field]']
+        except:
+            pass
+
+        if direction == 'asc':
+            clients = clients.order_by(field)
+        elif direction == 'desc':
+            clients = clients.order_by('-'+field)
+        else:
+            return clients
+
+        return clients
+
